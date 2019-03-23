@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bottlecap.Components.Bots", "Bottlecap.Components.Bots.csproj", "{B16EFD05-DF2E-4D13-A025-DC0EBA69FDCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bottlecap.Components.Bots.Alexa", "Alexa\Bottlecap.Components.Bots.Alexa.csproj", "{A810488C-8040-42B9-9BA8-C25424C9BF60}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1C00A129-EE48-4F57-A0FA-273A161CB10E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bottlecap.Components.Bots.Tests.IntegrationTests", "Tests\IntegrationTests\Bottlecap.Components.Bots.Tests.IntegrationTests.csproj", "{B4FEF5A0-1C61-4E90-8D5E-EDB02C55EFDB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B16EFD05-DF2E-4D13-A025-DC0EBA69FDCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B16EFD05-DF2E-4D13-A025-DC0EBA69FDCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B16EFD05-DF2E-4D13-A025-DC0EBA69FDCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B16EFD05-DF2E-4D13-A025-DC0EBA69FDCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A810488C-8040-42B9-9BA8-C25424C9BF60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A810488C-8040-42B9-9BA8-C25424C9BF60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A810488C-8040-42B9-9BA8-C25424C9BF60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A810488C-8040-42B9-9BA8-C25424C9BF60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4FEF5A0-1C61-4E90-8D5E-EDB02C55EFDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4FEF5A0-1C61-4E90-8D5E-EDB02C55EFDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4FEF5A0-1C61-4E90-8D5E-EDB02C55EFDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4FEF5A0-1C61-4E90-8D5E-EDB02C55EFDB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B4FEF5A0-1C61-4E90-8D5E-EDB02C55EFDB} = {1C00A129-EE48-4F57-A0FA-273A161CB10E}
+	EndGlobalSection
+EndGlobal
