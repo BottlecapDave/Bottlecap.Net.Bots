@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Bottlecap.Components.Bots.Content
+namespace Bottlecap.Net.Bots.Content
 {
     public static class ContentBuilderManager
     {

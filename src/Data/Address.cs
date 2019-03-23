@@ -1,8 +1,7 @@
-﻿using Bottlecap.Json;
-using System;
+﻿using System;
 using System.Text;
 
-namespace Bottlecap.Components.Bots.Data
+namespace Bottlecap.Net.Bots.Data
 {
     public class Address
     {

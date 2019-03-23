@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bottlecap.Components.Bots
+namespace Bottlecap.Net.Bots
 {
     [Flags]
     public enum PermissionType

@@ -4,9 +4,9 @@ using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
 using Amazon.Lambda.Core;
 using Bottlecap.Authentication;
-using Bottlecap.Components.Bots.Alexa.Data;
-using Bottlecap.Components.Bots.Alexa.Web;
-using Bottlecap.Components.Bots.Web;
+using Bottlecap.Net.Bots.Alexa.Data;
+using Bottlecap.Net.Bots.Alexa.Web;
+using Bottlecap.Net.Bots.Web;
 using Bottlecap.Json;
 using Bottlecap.Web;
 using System;
@@ -15,7 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bottlecap.Components.Bots.Alexa
+namespace Bottlecap.Net.Bots.Alexa
 {
     public class AlexaBot : IBot
     {
@@ -50,7 +50,7 @@ namespace Bottlecap.Components.Bots.Alexa
             }
         }
 
-        private Pair<decimal, decimal>? _location;
+        private Tuple<decimal, decimal> _location;
 
         private Bots.Data.Address _address;
 
@@ -178,7 +178,7 @@ namespace Bottlecap.Components.Bots.Alexa
             return _address;
         }
 
-        public async Task<Pair<decimal, decimal>?> GetLocationAsync()
+        public async Task<Tuple<decimal, decimal>> GetLocationAsync()
         {
             if (_location == null)
             {

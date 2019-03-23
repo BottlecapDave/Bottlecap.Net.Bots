@@ -1,4 +1,4 @@
-﻿namespace Bottlecap.Components.Bots.Alexa.Data
+﻿namespace Bottlecap.Net.Bots.Alexa.Data
 {
     public class Address
     {

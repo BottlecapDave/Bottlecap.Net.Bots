@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Bottlecap.Components.Bots
+namespace Bottlecap.Net.Bots
 {
     public interface IBotQuery
     {

@@ -1,4 +1,4 @@
-﻿namespace Bottlecap.Components.Bots.Content
+﻿namespace Bottlecap.Net.Bots.Content
 {
     public interface IContentBuilder
     {

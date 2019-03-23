@@ -1,13 +1,13 @@
-﻿using Bottlecap.Json.Web;
-using System;
+﻿using System;
 using System.Net;
-using System.IO;
 
-namespace Bottlecap.Components.Bots.Web
+namespace Bottlecap.Net.Bots.Web
 {
-    public class GeolocationRequest : JsonWebRequestItem<GeolocationResponse>
+    public class GeolocationRequest
     {
         public const string URL_FORMAT = "https://maps.googleapis.com/maps/api/geocode/json?address={0}&key={1}";
+
+        public Uri TargetUri { get; private set; }
 
         public GeolocationRequest(string apiKey, string location)
         {

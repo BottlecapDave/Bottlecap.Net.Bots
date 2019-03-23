@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bottlecap.Components.Bots
+namespace Bottlecap.Net.Bots
 {
     public class BotResponse : IBotResponse
     {

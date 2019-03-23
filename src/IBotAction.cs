@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Bottlecap.Components.Bots
+namespace Bottlecap.Net.Bots
 {
     public interface IBotAction
     {

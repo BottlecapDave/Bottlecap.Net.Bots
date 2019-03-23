@@ -1,7 +1,7 @@
-﻿using Bottlecap.Components.Bots.Data;
+﻿using Bottlecap.Net.Bots.Data;
 using System.Collections.Generic;
 
-namespace Bottlecap.Components.Bots.Web
+namespace Bottlecap.Net.Bots.Web
 {
     public class GeolocationResponse
     {

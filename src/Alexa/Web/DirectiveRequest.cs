@@ -1,11 +1,11 @@
-﻿using Bottlecap.Components.Bots.Alexa.Data;
+﻿using Bottlecap.Net.Bots.Alexa.Data;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace Bottlecap.Components.Bots.Alexa.Web
+namespace Bottlecap.Net.Bots.Alexa.Web
 {
     public class DirectiveRequest : Bottlecap.Web.WebRequestItem
     {

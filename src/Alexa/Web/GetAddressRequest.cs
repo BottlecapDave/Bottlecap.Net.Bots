@@ -1,9 +1,9 @@
-﻿using Bottlecap.Components.Bots.Alexa.Data;
+﻿using Bottlecap.Net.Bots.Alexa.Data;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Bottlecap.Components.Bots.Alexa.Web
+namespace Bottlecap.Net.Bots.Alexa.Web
 {
     public class GetAddressRequest : Json.Web.JsonWebRequestItem<Address>
     {

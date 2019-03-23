@@ -1,4 +1,4 @@
-﻿namespace Bottlecap.Components.Bots.Data
+﻿namespace Bottlecap.Net.Bots.Data
 {
     public class AddressLocation
     {

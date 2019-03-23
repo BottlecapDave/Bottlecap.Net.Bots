@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.3</TargetFramework>
+    <RootNamespace>Bottlecap.Net.Bots</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Alexa\**" />
+    <Compile Remove="packages\**" />
+    <EmbeddedResource Remove="Alexa\**" />
+    <EmbeddedResource Remove="packages\**" />
+    <None Remove="Alexa\**" />
+    <None Remove="packages\**" />
+  </ItemGroup>
+
+</Project>

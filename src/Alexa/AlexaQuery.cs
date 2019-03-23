@@ -2,7 +2,7 @@
 using Alexa.NET.Request;
 using System;
 
-namespace Bottlecap.Components.Bots.Alexa
+namespace Bottlecap.Net.Bots.Alexa
 {
     public class AlexaQuery : IBotQuery
     {

@@ -1,7 +1,7 @@
-﻿using Bottlecap.Authentication;
+﻿using System;
 using System.Threading.Tasks;
 
-namespace Bottlecap.Components.Bots
+namespace Bottlecap.Net.Bots
 {
     public interface IBot
     {
@@ -11,7 +11,7 @@ namespace Bottlecap.Components.Bots
 
         string Locale { get; }
 
-        Task<Pair<decimal, decimal>?> GetLocationAsync();
+        Task<Tuple<decimal, decimal>> GetLocationAsync();
 
         Task<Bots.Data.Address> GetAddressAsync();
 

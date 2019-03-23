@@ -1,4 +1,4 @@
-﻿namespace Bottlecap.Components.Bots
+﻿namespace Bottlecap.Net.Bots
 {
     public enum QueryType
     {
