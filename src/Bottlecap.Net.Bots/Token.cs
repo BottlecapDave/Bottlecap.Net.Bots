@@ -1,0 +1,9 @@
+﻿namespace Bottlecap.Net.Bots
+{
+    public class Token
+    {
+        public string Type { get; set; }
+
+        public string Value { get; set; }
+    }
+}

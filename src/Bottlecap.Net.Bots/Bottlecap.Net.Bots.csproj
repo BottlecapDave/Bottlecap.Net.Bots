@@ -1,17 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Bottlecap.Net.Bots</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Alexa\**" />
-    <Compile Remove="packages\**" />
-    <EmbeddedResource Remove="Alexa\**" />
-    <EmbeddedResource Remove="packages\**" />
     <None Remove="Alexa\**" />
     <None Remove="packages\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="RestSharp" Version="106.6.9" />
   </ItemGroup>
 
 </Project>

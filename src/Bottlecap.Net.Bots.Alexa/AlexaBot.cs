@@ -3,24 +3,18 @@ using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
 using Amazon.Lambda.Core;
-using Bottlecap.Authentication;
 using Bottlecap.Net.Bots.Alexa.Data;
 using Bottlecap.Net.Bots.Alexa.Web;
-using Bottlecap.Net.Bots.Web;
-using Bottlecap.Json;
-using Bottlecap.Web;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Bottlecap.Net.Bots.Alexa
 {
     public class AlexaBot : IBot
     {
-        public string GeolocationApiKey { get { return "AIzaSyBcuF-nlaP4IbOuaUDjf2qeH7pS8HGjMlI"; } }
-
         public Token AuthToken { get; private set; }
 
         private IBotQuery _query;
@@ -54,17 +48,22 @@ namespace Bottlecap.Net.Bots.Alexa
 
         private Bots.Data.Address _address;
 
-        private SkillRequest _request;
+        private readonly SkillRequest _request;
+        private readonly ILambdaContext _context;
+        private readonly bool _addressOnlySupportsPostalCode;
+        private readonly string _geolocationApiKey;
+        private readonly AddressService _addressService = new AddressService();
+        private readonly DirectiveService _directiveService = new DirectiveService();
 
-        private ILambdaContext _context;
-
-        private bool _addressOnlySupportsPostalCode;
-
-        public AlexaBot(SkillRequest request, ILambdaContext context, bool addressOnlySupportsPostalCode = true)
+        public AlexaBot(SkillRequest request, 
+                        ILambdaContext context,
+                        bool addressOnlySupportsPostalCode = true,
+                        string geolocationApiKey = null)
         {
             _request = request;
             _context = context;
             _addressOnlySupportsPostalCode = addressOnlySupportsPostalCode;
+            _geolocationApiKey = geolocationApiKey;
 
             Initialise();
         }
@@ -98,7 +97,7 @@ namespace Bottlecap.Net.Bots.Alexa
                 var card = response.Content as ICard;
                 if (card != null)
                 {
-                    nativeResponse = ResponseBuilder.TellWithCard(outputSpeech, response.Title ?? String.Empty, JsonFactory.Current.ToJson(card), _request.Session);
+                    nativeResponse = ResponseBuilder.TellWithCard(outputSpeech, response.Title ?? String.Empty, JsonConvert.SerializeObject(card), _request.Session);
                 }
                 else
                 {
@@ -130,10 +129,8 @@ namespace Bottlecap.Net.Bots.Alexa
         {
             if (String.IsNullOrEmpty(_request.Session?.User?.AccessToken) == false)
             {
-                AuthToken = new Token(_request.Session?.User?.AccessToken, "Bearer");
+                AuthToken = new Token() { Type = "Bearer", Value = _request.Session?.User?.AccessToken };
             }
-
-            AuthenticationContext.Initialise(accessToken: AuthToken);
         }
 
         public async Task<Bots.Data.Address> GetAddressAsync()
@@ -148,25 +145,24 @@ namespace Bottlecap.Net.Bots.Alexa
                     String.IsNullOrEmpty(consentToken) == false &&
                     String.IsNullOrEmpty(baseUri) == false)
                 {
-                    var addressRequest = new GetAddressRequest(consentToken, baseUri, deviceId, _addressOnlySupportsPostalCode);
-                    if (await WebRequestManager.MakeRequestAsync(addressRequest) &&
-                        addressRequest.Response != null)
+                    var response = await _addressService.GetAddressAsync(consentToken, baseUri, deviceId, _addressOnlySupportsPostalCode);
+                    if (response != null)
                     {
                         Log("Address retrieved");
 
                         _address = new Bots.Data.Address()
                         {
-                            AddressLine1 = addressRequest.Response.addressLine1,
-                            AddressLine2 = addressRequest.Response.addressLine2,
-                            AddressLine3 = addressRequest.Response.addressLine3,
-                            City = addressRequest.Response.city,
-                            Postcode = addressRequest.Response.postalCode,
-                            CountryCode = addressRequest.Response.countryCode
+                            AddressLine1 = response.addressLine1,
+                            AddressLine2 = response.addressLine2,
+                            AddressLine3 = response.addressLine3,
+                            City = response.city,
+                            Postcode = response.postalCode,
+                            CountryCode = response.countryCode
                         };
                     }
                     else
                     {
-                        Log("Failed to retrieve address. {0}", addressRequest.RawResponse);
+                        Log("Failed to retrieve address");
                     }
                 }
                 else
@@ -182,6 +178,12 @@ namespace Bottlecap.Net.Bots.Alexa
         {
             if (_location == null)
             {
+                if (String.IsNullOrEmpty(_geolocationApiKey))
+                {
+                    Log("Unable to get location. Geolocation API Key not set.");
+                    return null;
+                }
+
                 var consentToken = _request.Context?.System?.ApiAccessToken;
                 var deviceId = _request.Context?.System?.Device?.DeviceID;
                 var baseUri = _request.Context?.System?.ApiEndpoint;
@@ -190,19 +192,16 @@ namespace Bottlecap.Net.Bots.Alexa
                     String.IsNullOrEmpty(consentToken) == false &&
                     String.IsNullOrEmpty(baseUri) == false)
                 {
-                    var addressRequest = new GetAddressRequest(consentToken, baseUri, deviceId, _addressOnlySupportsPostalCode);
-                    if (await WebRequestManager.MakeRequestAsync(addressRequest))
+                    var addressResponse = await _addressService.GetAddressAsync(consentToken, baseUri, deviceId, _addressOnlySupportsPostalCode);
+                    if (addressResponse != null && String.IsNullOrEmpty(addressResponse.postalCode) == false)
                     {
-                        if (String.IsNullOrEmpty(addressRequest.Response.postalCode) == false)
+                        var geoLocationResponse = await _addressService.GetGeoLocationsAsync(_geolocationApiKey, addressResponse.postalCode);
+                        if (geoLocationResponse != null)
                         {
-                            var geoLocationRequest = new GeolocationRequest(GeolocationApiKey, addressRequest.Response.postalCode);
-                            if (await WebRequestManager.MakeRequestAsync(geoLocationRequest))
+                            var result = geoLocationResponse.FirstOrDefault();
+                            if (result.geometry?.location != null)
                             {
-                                var result = geoLocationRequest.Response.results.FirstOrDefault();
-                                if (result.geometry?.location != null)
-                                {
-                                    _location = new Pair<decimal, decimal>(result.geometry.location.lat, result.geometry.location.lng);
-                                }
+                                _location = new Tuple<decimal, decimal>(result.geometry.location.lat, result.geometry.location.lng);
                             }
                         }
                     }
@@ -229,15 +228,13 @@ namespace Bottlecap.Net.Bots.Alexa
             if (String.IsNullOrEmpty(_request.Context.System.ApiEndpoint) == false &&
                 String.IsNullOrEmpty(_request.Context.System.ApiAccessToken) == false)
             {
-                var request = new DirectiveRequest(_request.Context.System.ApiAccessToken, _request.Context.System.ApiEndpoint, directive);
-
-                if (await WebRequestManager.MakeRequestAsync(request))
+                if (await _directiveService.SendDirectiveAsync(_request.Context.System.ApiAccessToken, _request.Context.System.ApiEndpoint, directive))
                 {
                     Log("Progress Response succesful");
                 }
                 else
                 {
-                    Log("Progress Response unsuccessful. Response: {0}", request.RawResponse);
+                    Log("Progress Response unsuccessful");
                 }
             }
             else
@@ -277,7 +274,7 @@ namespace Bottlecap.Net.Bots.Alexa
                 }
                 else if (value != null)
                 {
-                    specificValue = JsonFactory.Current.ReadJson<T>(value.ToString());
+                    specificValue = JsonConvert.DeserializeObject<T>(value.ToString());
                     if (specificValue != null)
                     {
                         Log("GetContextAsync Successful");
