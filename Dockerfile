@@ -3,7 +3,7 @@ WORKDIR /app
 
 # Install coverlet
 ENV PATH="$PATH:/root/.dotnet/tools"
-RUN dotnet tool install --global coverlet.console
+RUN dotnet tool install coverlet.console --global --version 1.4.1
 
 # Copy csproj and restore as distinct layers
 COPY src/Bottlecap.Net.Bots/*.csproj ./Bottlecap.Net.Bots/

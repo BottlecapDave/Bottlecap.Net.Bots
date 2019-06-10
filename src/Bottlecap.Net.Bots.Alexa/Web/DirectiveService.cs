@@ -17,6 +17,8 @@ namespace Bottlecap.Net.Bots.Alexa.Web
             request.AddHeader("Authorization", $"Bearer {token}");
             request.AddHeader("Content-Type", "application/json");
 
+            request.AddJsonBody(directive);
+
             await client.PostAsync<object>(request);
 
             return true;
