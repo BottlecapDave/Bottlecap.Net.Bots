@@ -146,7 +146,13 @@ namespace Bottlecap.Net.Bots.Alexa
                     String.IsNullOrEmpty(baseUri) == false)
                 {
                     var response = await _addressService.GetAddressAsync(consentToken, baseUri, deviceId, _addressOnlySupportsPostalCode);
-                    if (response != null)
+                    if (response != null &&
+                        (String.IsNullOrEmpty(response.addressLine1) == false ||
+                         String.IsNullOrEmpty(response.addressLine2) == false ||
+                         String.IsNullOrEmpty(response.addressLine3) == false ||
+                         String.IsNullOrEmpty(response.city) == false ||
+                         String.IsNullOrEmpty(response.postalCode) == false ||
+                         String.IsNullOrEmpty(response.countryCode) == false))
                     {
                         Log("Address retrieved");
 
