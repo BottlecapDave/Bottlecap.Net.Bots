@@ -53,7 +53,6 @@ namespace Bottlecap.Net.Bots.Alexa
         private readonly bool _addressOnlySupportsPostalCode;
         private readonly string _geolocationApiKey;
         private readonly AddressService _addressService = new AddressService();
-        private readonly DirectiveService _directiveService = new DirectiveService();
 
         public AlexaBot(SkillRequest request, 
                         ILambdaContext context,
@@ -219,33 +218,15 @@ namespace Bottlecap.Net.Bots.Alexa
 
         public async Task SendProgressResponseAsync(IBotResponse response)
         {
-            var directive = new Directive()
+            var progressiveResponse = new ProgressiveResponse(_request);
+            var speechResponse = await progressiveResponse.SendSpeech(response.Speak);
+            if (speechResponse.IsSuccessStatusCode)
             {
-                header = new DirectiveHeader()
-                {
-                    requestId = _request.Request.RequestId
-                },
-                directive = new DirectiveContent()
-                {
-                    speech = response.Speak
-                }
-            };
-
-            if (String.IsNullOrEmpty(_request.Context.System.ApiEndpoint) == false &&
-                String.IsNullOrEmpty(_request.Context.System.ApiAccessToken) == false)
-            {
-                if (await _directiveService.SendDirectiveAsync(_request.Context.System.ApiAccessToken, _request.Context.System.ApiEndpoint, directive))
-                {
-                    Log("Progress Response succesful");
-                }
-                else
-                {
-                    Log("Progress Response unsuccessful");
-                }
+                Log("Progress Response successful");
             }
             else
             {
-                Log("Progress Response unsuccessful. API endpoint or access token was not avsilable.");
+                Log("Progress Response unsuccessful");
             }
         }
 
